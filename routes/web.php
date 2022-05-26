@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\NewsCategoryController;
+use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Admin\IndexController as AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,18 +17,40 @@ use App\Http\Controllers\NewsCategoryController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [IndexController::class, 'index'])->name('home');
 
-Route::get('/news', [NewsController::class, 'index']);
-Route::get('/news/newsCategory', [NewsCategoryController::class, 'index']);
-Route::get('/news/{id}', [NewsController::class, 'show']);
-Route::get('/news/newsCat/Sport', [NewsController::class, 'showSport']);
-Route::get('/news/newsCat/Economy', [NewsController::class, 'showEconomy']);
-Route::get('/news/newsCat/Society', [NewsController::class, 'showSociety']);
-Route::get('/news/newsCat/Law', [NewsController::class, 'showLaw']);
-Route::get('/news/newsCat/Weather', [NewsController::class, 'showWeather']);
-Route::get('/auth', [NewsController::class, 'auth']);
-Route::get('/addNews', [NewsController::class, 'addNews']);
+
+Route::name('news.')
+    ->prefix('news')
+    ->group(function () {
+        Route::get('/', [NewsController::class, 'index'])->name('index');
+        Route::get('/one/{id}', [NewsController::class, 'show'])->name('show');
+        Route::name('category.')
+            ->group(function () {
+                Route::get('/categories', [CategoryController::class, 'index'])->name('index');
+                Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('show');
+            });
+
+    });
+
+Route::name('admin.')
+    ->prefix('admin')
+    ->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('index');
+        Route::get('/test1', [AdminController::class, 'test1'])->name('test1');
+        Route::get('/test2', [AdminController::class, 'test2'])->name('test2');
+        Route::match(['get', 'post'],'/test3', [AdminController::class, 'test3'])->name('test3');
+        Route::match(['get', 'post'],'/create', [AdminController::class, 'create'])->name('create');
+
+    });
+
+Route::view('/about', 'about')->name('about');
+Route::view('/feedback', 'feedback')->name('feedback');
+Route::view('/order', 'order')->name('order');
+
+/* Auth::routes(); */
+
+//Route::get('/', function (){
+//   return 'Это для тестирования приложения';
+//});
 

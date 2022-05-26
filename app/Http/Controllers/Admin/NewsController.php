@@ -46,7 +46,9 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        //
+//        $news = DB::table('news')->find($id); //getOne($id)
+//
+//        return view('news.one')->with('news', $news);
     }
 
     /**

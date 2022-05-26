@@ -2,71 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function index(News $news)
     {
-        $news = $this->getNews();
-        return view('news/index',[
-            'newsList' => $news
-            ]);
+        //$news = DB::select('SELECT * FROM `news` WHERE 1');
+        //dd($news);
+        $news = DB::table('news') -> get(); // getAll
+        return view('news.index')->with('news', $news);
     }
 
-    public function auth()
+    public function show($id)
     {
-        return view('auth');
+        $news = DB::table('news') -> find($id);
+        //dd($news);
+        return view('news.one')->with('news', $news);;
     }
-
-    public function show(int $id)
-    {
-       return "Новость с ID = ".$id;
-    }
-
-    public function addNews()
-    {
-        return view('addNews');
-    }
-
-    public function showSport()
-    {
-        $news = $this->getNews();
-        return view('news/newsCat/Sport', [
-            'newsList' => $news
-        ]);
-    }
-
-    public function showEconomy()
-    {
-        $news = $this->getNews();
-        return view('news/newsCat/Economy', [
-            'newsList' => $news
-        ]);
-    }
-
-    public function showSociety()
-    {
-        $news = $this->getNews();
-        return view('news/newsCat/Society', [
-            'newsList' => $news
-        ]);
-    }
-
-    public function showLaw()
-    {
-        $news = $this->getNews();
-        return view('news/newsCat/Law', [
-            'newsList' => $news
-        ]);
-    }
-
-    public function showWeather()
-    {
-        $news = $this->getNews();
-        return view('news/newsCat/Weather', [
-            'newsList' => $news
-        ]);
-    }
-
 }
