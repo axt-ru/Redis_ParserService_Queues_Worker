@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>@section('title')Агрегатор | @show</title>
+    <title>@section('title')Агрегатор новостей | @show</title>
     <link rel="stylesheet" href="{{ asset("css/app.css") }}">
 </head>
 <body>
