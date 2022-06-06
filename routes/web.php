@@ -1,9 +1,16 @@
 <?php
 
+
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Account\IndexController as AccountController;
+
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\IndexController as AdminController;
@@ -34,11 +41,17 @@ Route::name('news.')
             });
 
     });
+Route::match(['get', 'post'], '/profile', [ProfileController::class, 'update'])->name('updateProfile');
 
+//Route::get('/account', AccountController::class ) -> name('account');
 
+// admin's routes
 Route::name('admin.')
     ->prefix('admin')
+    ->middleware(['auth', 'is_admin'])
     ->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('updateUsers');
+        Route::get('/users/toggleAdmin/{user}', [UserController::class, 'toggleAdmin'])->name('toggleAdmin');
         Route::get('/', [AdminNewsController::class, 'index'])->name('index');
         Route::get('/test1', [AdminController::class, 'test1'])->name('test1');
         Route::get('/test2', [AdminController::class, 'test2'])->name('test2');
@@ -56,9 +69,15 @@ Route::view('/about', 'about')->name('about');
 Route::view('/feedback', 'feedback')->name('feedback');
 Route::view('/order', 'order')->name('order');
 
-/* Auth::routes(); */
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('logout', [LoginController::class, 'logout']);
 
-//Route::get('/', function (){
-//   return 'Это для тестирования приложения';
-//});
+Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [RegisterController::class, 'register']);
 
+
+//Auth::routes();
+
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

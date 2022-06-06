@@ -28,7 +28,8 @@ class NewsRequest extends FormRequest
             'title' => ['required', 'min:5', 'max:20', new Ember()],
             'text' => 'required|min:5',
             'category_id' => "required|exists:App\Models\Category,id",
-            'image' => 'mimes:jpeg,bmp,png|max:1000'
+            'image' => 'mimes:jpeg,bmp,png|max:1000',
+            'isPrivate' => 'sometimes|in:1'
         ];
     }
 

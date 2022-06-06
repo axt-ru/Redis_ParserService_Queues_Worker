@@ -23,6 +23,18 @@ class CategorySeeder extends Seeder
                 "title" => "Погода",
                 "slug" => "weather"
             ],
+            [
+                "title" => "Спорт",
+                "slug" => "sport"
+            ],
+            [
+                "title" => "Общество",
+                "slug" => "society"
+            ],
+            [
+                "title" => "Авто",
+                "slug" => "auto"
+            ]
         ];
 
         DB::table('categories')->insert($category);
