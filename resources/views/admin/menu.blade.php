@@ -15,7 +15,7 @@
 </li>
 
 <li class="nav-item">
-    <a class="nav-link" href="{{ route('admin.test2') }}">Выгрузить картинку</a>
+    <a class="nav-link" href="{{ route('admin.parser') }}">Парсер</a>
 </li>
 
 <li class="nav-item">

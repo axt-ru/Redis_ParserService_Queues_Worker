@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Admin\ParserController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IndexController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Account\IndexController as AccountController;
 
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SocialController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\IndexController as AdminController;
@@ -43,9 +45,10 @@ Route::name('news.')
     });
 Route::match(['get', 'post'], '/profile', [ProfileController::class, 'update'])->name('updateProfile');
 
-//Route::get('/account', AccountController::class ) -> name('account');
-
-// admin's routes
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/account', AccountController::class)
+        ->name('account');
+// routes - admin's
 Route::name('admin.')
     ->prefix('admin')
     ->middleware(['auth', 'is_admin'])
@@ -55,8 +58,10 @@ Route::name('admin.')
         Route::get('/', [AdminNewsController::class, 'index'])->name('index');
         Route::get('/test1', [AdminController::class, 'test1'])->name('test1');
         Route::get('/test2', [AdminController::class, 'test2'])->name('test2');
+        Route::get('/parser', ParserController::class)->name('parser');
         Route::resource('/news', AdminNewsController::class)->except('show');
     });
+});
 
 Route::get('/categories', [AdminCategoryController::class, 'showCategories'])->name('showCategories');
 Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('create');
@@ -77,6 +82,14 @@ Route::post('logout', [LoginController::class, 'logout']);
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
+Route::group(['middleware' => 'guest'], function() {
+    Route::get('/auth/{driver}/redirect', [SocialController::class, 'redirect'])
+        ->where('driver', '\w+')
+        ->name('social.redirect');
+    Route::any('/auth/{driver}/callback', [SocialController::class, 'callback'])
+        ->where('driver', '\w+')
+        ->name('social.callback');
+});
 
 //Auth::routes();
 
