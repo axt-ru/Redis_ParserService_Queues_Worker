@@ -53,7 +53,16 @@
                                         @endforeach
                                     </div>
                                 @endif
-                                <textarea name="text" id="newsText" class="form-control">{{ old('text')   ?? $news->text}}</textarea>
+                                <textarea name="text" id="editor" class="form-control">{{ old('text')   ?? $news->text}}</textarea>
+
+                                <script src={{ asset('ckeditor/ckeditor.js') }}></script>
+                                <script>
+                                    ClassicEditor
+                                        .create( document.querySelector( '#editor' ) )
+                                        .catch( error => {
+                                            console.error( error );
+                                        } );
+                                </script>
 
                                 <div class="form-check">
                                     <input

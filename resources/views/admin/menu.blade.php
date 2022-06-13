@@ -19,6 +19,10 @@
 </li>
 
 <li class="nav-item">
+    <a class="nav-link" href="{{ route('link.index') }}">Добавление ресурса для парсинга</a>
+</li>
+
+<li class="nav-item">
     <a class="nav-link" href="{{ route('updateProfile') }}">Профиль</a>
 </li>
 

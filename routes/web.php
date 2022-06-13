@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Admin\ParserController;
+use App\Http\Controllers\Admin\RssLinkController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IndexController;
@@ -43,7 +44,9 @@ Route::name('news.')
             });
 
     });
-Route::match(['get', 'post'], '/profile', [ProfileController::class, 'update'])->name('updateProfile');
+Route::match(['get', 'post'], '/profile', [ProfileController::class, 'update'])
+    ->middleware('auth')
+    ->name('updateProfile');
 
 Route::group(['middleware' => 'auth'], function() {
     Route::get('/account', AccountController::class)
@@ -58,10 +61,13 @@ Route::name('admin.')
         Route::get('/', [AdminNewsController::class, 'index'])->name('index');
         Route::get('/test1', [AdminController::class, 'test1'])->name('test1');
         Route::get('/test2', [AdminController::class, 'test2'])->name('test2');
-        Route::get('/parser', ParserController::class)->name('parser');
+        Route::get('/parser', [ParserController::class, 'index'])->name('parser');
         Route::resource('/news', AdminNewsController::class)->except('show');
     });
 });
+
+Route::resource('/link', RssLinkController::class)
+    ->middleware(['auth', 'is_admin']);
 
 Route::get('/categories', [AdminCategoryController::class, 'showCategories'])->name('showCategories');
 Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('create');
@@ -90,6 +96,7 @@ Route::group(['middleware' => 'guest'], function() {
         ->where('driver', '\w+')
         ->name('social.callback');
 });
+
 
 //Auth::routes();
 
